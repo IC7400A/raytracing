@@ -39,6 +39,10 @@ int main(){
       if(event.type == SDL_QUIT){
         simulation_running = 0;
       }
+      if(event.type == SDL_MOUSEMOTION && event.motion.state != 0){
+        circle.x = event.motion.x;
+        circle.y = event.motion.y;
+      }
     }
     FillCircle(surface, circle, COLOR_WHITE);
     SDL_UpdateWindowSurface(window);
