@@ -31,7 +31,18 @@ int main(){
   //SDL_Rect rect = (SDL_Rect){200, 200, 200, 200};
   //SDL_FillRect(surface, &rect, COLOR_WHITE);
   struct Circle circle = {200, 200, 80};
-  FillCircle(surface, circle, COLOR_WHITE);
-  SDL_UpdateWindowSurface(window);
-  SDL_Delay(5000);
+
+  int simulation_running = 1;
+  SDL_Event event;
+  while(simulation_running){
+    while(SDL_PollEvent(&event)){
+      if(event.type == SDL_QUIT){
+        simulation_running = 0;
+      }
+    }
+    FillCircle(surface, circle, COLOR_WHITE);
+    SDL_UpdateWindowSurface(window);
+    SDL_Delay(10);
+  }
+  
 }
