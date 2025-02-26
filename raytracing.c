@@ -82,6 +82,8 @@ int main(){
   struct Ray rays[RAYS_NUMBER];
   generate_rays(circle, rays);
 
+  double obstacle_speed_y =1;
+
 
   int simulation_running = 1;
   SDL_Event event;
@@ -100,6 +102,15 @@ int main(){
     FillCircle(surface, circle, COLOR_WHITE);
     FillCircle(surface, shadow_circle, COLOR_WHITE);
     FillRays(surface, rays, COLOR_GRAY, shadow_circle);
+    shadow_circle.y += obstacle_speed_y;
+    if(shadow_circle.y < 0){
+      obstacle_speed_y = -obstacle_speed_y;
+    }
+    if(shadow_circle.y > HEIGHT){
+      obstacle_speed_y = -obstacle_speed_y;
+    }
+    
+
     SDL_UpdateWindowSurface(window);
     SDL_Delay(10);
   }
