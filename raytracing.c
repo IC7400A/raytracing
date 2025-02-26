@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <math.h>
-#define WIDTH 900
+#define WIDTH 1000
 #define HEIGHT 600
 #define COLOR_WHITE 0xffffffff
 #define COLOR_BLACK 0x00000000
-#define COLOR_GRAY 0xefefefef
-#define RAYS_NUMBER 100
+#define COLOR_RAY 0xffd43b
+#define RAYS_NUMBER 5000
 
 struct Circle{
   double x;
@@ -52,7 +52,7 @@ void FillRays(SDL_Surface* surface, struct Ray rays[RAYS_NUMBER], Uint32 color, 
     while( !end_of_screen && !object_hit){
       x_draw += step*cos(ray.angle);
       y_draw += step*sin(ray.angle);
-      SDL_Rect pixel = (SDL_Rect){x_draw,y_draw,1,1};
+      SDL_Rect pixel = (SDL_Rect){x_draw,y_draw,3,3};
       SDL_FillRect(surface, &pixel, color);
       if(x_draw < 0 || x_draw > WIDTH){
         end_of_screen = 1;
@@ -76,8 +76,8 @@ int main(){
   SDL_Window* window = SDL_CreateWindow("Raytracing", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT,0);
   SDL_Surface* surface = SDL_GetWindowSurface(window);
 
-  struct Circle circle = {200, 200, 80};
-  struct Circle shadow_circle = {650, 300, 140};
+  struct Circle circle = {200, 200, 40};
+  struct Circle shadow_circle = {550, 300, 140};
   SDL_Rect erase_rect = {0, 0, WIDTH, HEIGHT};
   struct Ray rays[RAYS_NUMBER];
   generate_rays(circle, rays);
@@ -99,14 +99,15 @@ int main(){
       }
     }
     SDL_FillRect(surface, &erase_rect, COLOR_BLACK);
+    FillRays(surface, rays, COLOR_RAY, shadow_circle);
     FillCircle(surface, circle, COLOR_WHITE);
     FillCircle(surface, shadow_circle, COLOR_WHITE);
-    FillRays(surface, rays, COLOR_GRAY, shadow_circle);
+    
     shadow_circle.y += obstacle_speed_y;
-    if(shadow_circle.y < 0){
+    if(shadow_circle.y - shadow_circle.r < 0){
       obstacle_speed_y = -obstacle_speed_y;
     }
-    if(shadow_circle.y > HEIGHT){
+    if(shadow_circle.y + shadow_circle.r > HEIGHT){
       obstacle_speed_y = -obstacle_speed_y;
     }
     
